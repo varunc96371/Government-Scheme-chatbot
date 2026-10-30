@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+# Python Bytecode & Caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# IDE & Gemini artifacts
+.gemini/
+.idea/
+.vscode/

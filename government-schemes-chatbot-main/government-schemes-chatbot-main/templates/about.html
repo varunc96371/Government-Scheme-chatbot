@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — SchemeAI</title>
+
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16">
+</head>
+<body class="public-page">
+
+    <!-- Ambient Gradient Blobs -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 1.5rem;">
+        <!-- Top Navbar -->
+        <header class="navbar" style="margin-top: 1.25rem;">
+            <a href="/" class="brand">
+                <div class="brand-logo">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="SchemeAI Logo" class="brand-logo-img">
+                </div>
+                <span class="brand-name">Scheme<span>AI</span></span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="{{ url_for('schemes_catalog') }}" class="nav-item">Schemes</a>
+                <a href="{{ url_for('chat_workspace') }}" class="nav-item">Chatbot</a>
+                <a href="/about" class="nav-item active">About</a>
+                <a href="/feedback" class="nav-item">Feedback</a>
+            </nav>
+
+            <div class="nav-actions">
+                {% if logged_in %}
+                    <a href="{{ url_for('user_profile') }}" class="user-pill-btn">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span>{{ username }}</span>
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="btn-nav-logout" title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn-nav-login-light">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-nav-register-light">Register</a>
+                {% endif %}
+            </div>
+        </header>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div style="max-width: 860px; margin: 0 auto; padding: 0 1.5rem;">
+            <span class="badge" style="background: var(--lavender); color: var(--deep-purple); font-weight: 700; margin-bottom: 1.25rem; display: inline-block;">
+                <i class="fa-solid fa-sparkles" style="color: var(--primary-purple);"></i> Digital India AI Initiative
+            </span>
+            <h1 style="font-family: var(--font-heading); font-size: 2.75rem; font-weight: 800; color: var(--deep-purple); line-height: 1.2; margin-bottom: 1rem;">
+                Bridging Citizens to Welfare with Conversational AI
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.6; max-width: 720px; margin: 0 auto 2rem auto;">
+                SchemeAI was built to solve the discoverability challenge: helping students, farmers, women entrepreneurs, senior citizens, and persons with disabilities find government benefits without navigating endless paperwork.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                <a href="/chat" class="btn btn-primary-gradient"><i class="fa-solid fa-comments"></i> Try Chatbot Now</a>
+                <a href="/schemes" class="btn btn-secondary-purple"><i class="fa-solid fa-layer-group"></i> Browse Schemes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Technology / Workflow Section -->
+    <main style="max-width: 1200px; margin: 0 auto; padding: 4rem 1.5rem;">
+        <div style="text-align: center; margin-bottom: 3.5rem;">
+            <h2 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: var(--deep-purple);">How SchemeAI Works</h2>
+            <p style="color: var(--text-secondary); font-size: 1rem;">Precision retrieval combined with modern generative reasoning.</p>
+        </div>
+
+        <div class="about-features-grid">
+            <div class="about-feature-card">
+                <div class="about-feature-icon" style="background: var(--lavender); color: var(--primary-purple);">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                </div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.75rem;">
+                    1. Semantic Search (S-BERT)
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    Even if you don't know official scheme names, our Sentence-BERT embeddings match your natural words—in English or Hindi—with verified policies.
+                </p>
+            </div>
+
+            <div class="about-feature-card">
+                <div class="about-feature-icon" style="background: var(--mint-green); color: #047857;">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.75rem;">
+                    2. Vector Indexing (FAISS)
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    Lightning-fast sub-millisecond retrieval locates the top matching national and state schemes across our catalog of 90+ verified government schemes.
+                </p>
+            </div>
+
+            <div class="about-feature-card">
+                <div class="about-feature-icon" style="background: var(--sky-blue); color: #0284C7;">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.75rem;">
+                    3. Generative AI (Gemini)
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    Google Gemini synthesizes eligibility criteria, document requirements, and step-by-step application instructions into friendly, direct advice.
+                </p>
+            </div>
+        </div>
+
+        <!-- Mascot Showcase Banner -->
+        <div style="background: linear-gradient(135deg, var(--deep-purple) 0%, var(--primary-purple) 100%); border-radius: var(--radius-xl); padding: 3rem; color: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 2.5rem; box-shadow: 0 15px 35px rgba(17, 35, 90, 0.25);">
+            <div style="max-width: 620px;">
+                <span class="badge" style="background: rgba(184, 242, 216, 0.25); color: var(--mint-green); font-weight: 700; margin-bottom: 1rem; display: inline-block;">
+                    Always Free & Accessible
+                </span>
+                <h2 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem;">
+                    Ready to discover benefits you qualify for?
+                </h2>
+                <p style="color: #BFDBFE; font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.75rem;">
+                    Join thousands of citizens who save hours of research and connect directly with official government portals.
+                </p>
+                <a href="/chat" class="btn btn-white-pill">
+                    <i class="fa-solid fa-comments"></i> Start Conversation
+                </a>
+            </div>
+            <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 4px solid var(--white); box-shadow: 0 8px 24px rgba(0,0,0,0.2); flex-shrink: 0;">
+                <img src="{{ url_for('static', filename='images/robot_mascot.jpg') }}?v=16" alt="SchemeAI Mascot" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Scheme<span>AI</span></h3>
+                <p>Empowering citizens across India with AI-powered, bilingual guidance for central and state government welfare schemes.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Navigation</h4>
+                <ul>
+                    <li><a href="/"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                    <li><a href="/schemes"><i class="fa-solid fa-chevron-right"></i> All Schemes</a></li>
+                    <li><a href="/chat"><i class="fa-solid fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="/about"><i class="fa-solid fa-chevron-right"></i> About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Direct Support</h4>
+                <ul>
+                    <li><a href="/feedback"><i class="fa-solid fa-chevron-right"></i> Share Feedback</a></li>
+                    <li><a href="mailto:support@schemeai.gov.in"><i class="fa-solid fa-envelope"></i> support@schemeai.gov.in</a></li>
+                    <li><a href="/"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SchemeAI Portal. Built for inclusive digital governance.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

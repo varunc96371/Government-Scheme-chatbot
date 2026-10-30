@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback — SchemeAI</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16">
+</head>
+<body class="public-page">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="page-container" style="max-width: 1240px;">
+        <!-- Top Navbar -->
+        <header class="navbar" style="margin-top: 1.25rem;">
+            <a href="/" class="brand">
+                <div class="brand-logo">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="SchemeAI Logo" class="brand-logo-img">
+                </div>
+                <span class="brand-name">Scheme<span>AI</span></span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="{{ url_for('schemes_catalog') }}" class="nav-item">Schemes</a>
+                <a href="{{ url_for('chat_workspace') }}" class="nav-item">Chatbot</a>
+                <a href="/about" class="nav-item">About</a>
+                <a href="/feedback" class="nav-item active">Feedback</a>
+            </nav>
+
+            <div class="nav-actions">
+                {% if logged_in %}
+                    <a href="{{ url_for('user_profile') }}" class="user-pill-btn">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span>{{ username }}</span>
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="btn-nav-logout" title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn-nav-login-light">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-nav-register-light">Register</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Main Feedback Split Card (Panel 7) -->
+        <div class="feedback-split-layout">
+            
+            <!-- Left: Robot with Speech Bubble (Panel 7) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
+                <div class="auth-robot-speech-bubble" style="top: -20px; right: 25px;">
+                    Your opinion matters!
+                </div>
+                <img src="{{ url_for('static', filename='images/robot_mascot.png') }}?v=16" alt="SchemeAI Robot" class="auth-robot-mascot-img" style="width: 260px; height: 260px;">
+            </div>
+
+            <!-- Right: Feedback Form (Panel 7) -->
+            <div>
+                <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.35rem; letter-spacing: -0.4px;">
+                    We Value Your Feedback
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.75rem;">
+                    Your feedback helps us improve and serve you better.
+                </p>
+
+                {% if error %}
+                <div class="auth-alert error">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>{{ error }}</span>
+                </div>
+                {% endif %}
+
+                {% if success_msg %}
+                <div class="auth-alert success">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>{{ success_msg }}</span>
+                </div>
+                {% endif %}
+
+                <form action="{{ url_for('feedback_page') }}" method="POST">
+                    <div class="feedback-form-inputs-row">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{% if logged_in %}{{ username }}{% endif %}" required style="width: 100%; background: #F4F7FE; border: 1.5px solid var(--border-color); padding: 0.8rem 1rem; border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; outline: none;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" value="{% if user and user.email %}{{ user.email }}{% endif %}" required style="width: 100%; background: #F4F7FE; border: 1.5px solid var(--border-color); padding: 0.8rem 1rem; border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; outline: none;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message / Feedback</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Type your message or feedback here..." required style="width: 100%; background: #F4F7FE; border: 1.5px solid var(--border-color); padding: 0.85rem 1rem; border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; outline: none; resize: vertical;"></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.75rem;">
+                        <a href="/" class="btn btn-secondary" style="border-radius: var(--radius-pill); padding: 0.75rem 1.75rem; text-decoration: none;">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-pill); padding: 0.75rem 2rem;">
+                            <span>Submit Feedback</span>
+                            <i class="fa-solid fa-paper-plane" style="margin-left: 0.4rem;"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Scheme<span>AI</span></h3>
+                <p>Empowering citizens across India with AI-powered, bilingual guidance for central and state government welfare schemes.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Navigation</h4>
+                <ul>
+                    <li><a href="/"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                    <li><a href="/schemes"><i class="fa-solid fa-chevron-right"></i> All Schemes</a></li>
+                    <li><a href="/chat"><i class="fa-solid fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="/about"><i class="fa-solid fa-chevron-right"></i> About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Direct Support</h4>
+                <ul>
+                    <li><a href="/feedback"><i class="fa-solid fa-chevron-right"></i> Share Feedback</a></li>
+                    <li><a href="mailto:support@schemeai.gov.in"><i class="fa-solid fa-envelope"></i> support@schemeai.gov.in</a></li>
+                    <li><a href="/"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SchemeAI Portal. Built for inclusive digital governance.</p>
+        </div>
+    </footer>
+</body>
+</html>

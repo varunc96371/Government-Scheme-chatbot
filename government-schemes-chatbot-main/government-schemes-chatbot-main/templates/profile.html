@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile — SchemeAI</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16">
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation (Panel 8 - Rich Purple Gradient) -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-top">
+                <a href="/" class="brand" style="text-decoration: none;">
+                    <div class="brand-logo" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
+                        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="SchemeAI Logo" class="brand-logo-img">
+                    </div>
+                    <span class="brand-name">Scheme<span>AI</span></span>
+                </a>
+
+                <!-- User Profile Card in Sidebar -->
+                <div class="sidebar-user-card">
+                    <div class="sidebar-user-avatar">
+                        {{ username[0]|upper }}
+                    </div>
+                    <div class="sidebar-user-info">
+                        <h4>{{ username }}</h4>
+                        <p><span class="status-dot"></span> Online &bull; Citizen</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav class="sidebar-nav-menu">
+                    <a href="/" class="sidebar-menu-link">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                    <a href="{{ url_for('schemes_catalog') }}" class="sidebar-menu-link">
+                        <i class="fa-solid fa-layer-group"></i> Schemes
+                    </a>
+                    <a href="{{ url_for('chat_workspace') }}" class="sidebar-menu-link">
+                        <i class="fa-solid fa-comments"></i> Chatbot
+                    </a>
+                    <a href="{{ url_for('user_profile') }}" class="sidebar-menu-link active">
+                        <i class="fa-solid fa-circle-user"></i> Profile
+                    </a>
+                    <a href="/feedback" class="sidebar-menu-link">
+                        <i class="fa-solid fa-comment-dots"></i> Feedback
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="{{ url_for('logout') }}" class="btn-sidebar-logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Viewport (Panel 8) -->
+        <main class="profile-main-area" style="padding: 2.5rem 3rem; background: var(--bg-pale-lavender); overflow-y: auto;">
+            <!-- Header (Panel 8) -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.25rem;">
+                        My Profile
+                    </h1>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Manage your account details and preferences.
+                    </p>
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm" style="border-radius: var(--radius-pill); text-decoration: none;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </a>
+            </div>
+
+            <!-- Profile Info Banner Card (Panel 8) -->
+            <div style="background: var(--white); border: 1.5px solid var(--border-color); border-radius: var(--radius-xl); padding: 2rem 2.5rem; box-shadow: var(--shadow-card); display: flex; justify-content: space-between; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, var(--lavender), var(--mint-green)); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 800; color: var(--deep-purple); border: 3px solid var(--white); box-shadow: 0 4px 14px rgba(32, 84, 246, 0.15);">
+                        {{ username[0]|upper }}
+                    </div>
+                    <div>
+                        <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.25rem;">
+                            {{ username }}
+                        </h2>
+                        <p style="color: var(--text-secondary); font-size: 0.925rem;">
+                            {% if user and user.email %}{{ user.email }}{% else %}citizen@schemeai.gov.in{% endif %} &bull; Member since 2026
+                        </p>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('forgot_password') }}" class="btn btn-primary btn-sm" style="border-radius: var(--radius-pill); text-decoration: none;">
+                    <i class="fa-solid fa-pen-to-square"></i> Change Password
+                </a>
+            </div>
+
+            <!-- Two-Column Grid: Left (Stats + Preferences), Right (Quick Actions) -->
+            <div class="profile-sections-layout">
+                <div>
+                    <!-- 3 Pastel Metrics Cards (Panel 8: Ice Blue, Mint, Peach) -->
+                    <div class="profile-metrics-cards-grid">
+                        <div style="background: #F0F6FF; border: 1.5px solid #DBEAFE; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 46px; height: 46px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <div>
+                                <div style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--deep-purple); line-height: 1;">12</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-top: 0.2rem;">Schemes Viewed</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #F4FDF9; border: 1.5px solid #D1FAE5; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 46px; height: 46px; border-radius: 50%; background: #D4F7E7; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <div>
+                                <div style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--deep-purple); line-height: 1;">{{ chat_count }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-top: 0.2rem;">Chat Sessions</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #FFF9F5; border: 1.5px solid #FFEDD5; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 46px; height: 46px; border-radius: 50%; background: #FFF0E5; color: #EA580C; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <div>
+                                <div style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--deep-purple); line-height: 1;">3</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-top: 0.2rem;">Feedbacks Given</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- My Preferences (Panel 8) -->
+                    <div style="background: var(--white); border: 1.5px solid var(--border-color); border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-card);">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 1rem;">
+                            My Preferences
+                        </h3>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                            <span style="background: #EFF6FF; color: #2563EB; font-weight: 700; font-size: 0.85rem; padding: 0.45rem 1rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa-solid fa-graduation-cap"></i> Student
+                            </span>
+                            <span style="background: #FFE5F0; color: #DB2777; font-weight: 700; font-size: 0.85rem; padding: 0.45rem 1rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa-solid fa-person-dress"></i> Women Welfare
+                            </span>
+                        </div>
+                        <a href="/chat" class="btn btn-secondary btn-sm" style="border-radius: var(--radius-pill); text-decoration: none;">
+                            Update Preferences
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Quick Actions Card (Panel 8) -->
+                <div style="background: var(--white); border: 1.5px solid var(--border-color); border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-card);">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 1.25rem;">
+                        Quick Actions
+                    </h3>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="/schemes" class="quick-action-link">
+                            <div class="quick-action-left">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <span>View Schemes</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right" style="color: #94A3B8; font-size: 0.8rem;"></i>
+                        </a>
+
+                        <a href="/chat" class="quick-action-link">
+                            <div class="quick-action-left">
+                                <i class="fa-solid fa-comments"></i>
+                                <span>Start New Chat</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right" style="color: #94A3B8; font-size: 0.8rem;"></i>
+                        </a>
+
+                        <a href="/feedback" class="quick-action-link">
+                            <div class="quick-action-left">
+                                <i class="fa-solid fa-comment-dots"></i>
+                                <span>Share Feedback</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right" style="color: #94A3B8; font-size: 0.8rem;"></i>
+                        </a>
+
+                        <a href="/forgot-password" class="quick-action-link">
+                            <div class="quick-action-left">
+                                <i class="fa-solid fa-lock"></i>
+                                <span>Change Password</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right" style="color: #94A3B8; font-size: 0.8rem;"></i>
+                        </a>
+
+                        <a href="/logout" class="quick-action-link" style="color: var(--accent-red);">
+                            <div class="quick-action-left">
+                                <i class="fa-solid fa-arrow-right-from-bracket" style="color: var(--accent-red);"></i>
+                                <span>Logout</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right" style="color: #94A3B8; font-size: 0.8rem;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

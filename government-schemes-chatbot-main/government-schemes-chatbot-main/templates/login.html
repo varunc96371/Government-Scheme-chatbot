@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — SchemeAI</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16">
+</head>
+<body class="auth-page">
+    <!-- Ambient Background Blobs -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Side-by-Side Auth Container (Panel 2) -->
+    <div class="auth-split-layout">
+        <!-- Left: 3D Robot with "Good to see you!" Speech Bubble -->
+        <div class="auth-robot-col">
+            <div class="auth-robot-speech-bubble">Good to see you!</div>
+            <img src="{{ url_for('static', filename='images/robot_mascot.png') }}?v=16" alt="SchemeAI Robot" class="auth-robot-mascot-img">
+        </div>
+
+        <!-- Right: Clean White Elevated Card -->
+        <div class="auth-card">
+            <!-- Brand -->
+            <a href="/" class="auth-brand" style="justify-content: flex-start; margin-bottom: 1.25rem;">
+                <div class="brand-logo" style="width: 38px; height: 38px; border-radius: 10px;">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="SchemeAI Logo" class="brand-logo-img">
+                </div>
+                <span class="brand-name" style="font-size: 1.35rem;">Scheme<span>AI</span></span>
+            </a>
+
+            <h2 style="text-align: left; margin-bottom: 0.35rem;">Welcome Back</h2>
+            <p class="auth-subtitle" style="text-align: left; margin-bottom: 1.5rem;">
+                Login to access your government scheme recommendations.
+            </p>
+
+            <!-- Alerts & Flash Messages -->
+            {% if error %}
+            <div class="auth-alert error">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            {% if success_msg %}
+            <div class="auth-alert success">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>{{ success_msg }}</span>
+            </div>
+            {% endif %}
+
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user input-icon-left"></i>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock input-icon-left"></i>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password', 'toggleIcon')" title="Toggle password visibility">
+                            <i class="fa-solid fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-options">
+                    <a href="{{ url_for('forgot_password') }}" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; border-radius: var(--radius-md);">
+                    <span>Login</span>
+                    <i class="fa-solid fa-arrow-right" style="margin-left: 0.4rem;"></i>
+                </button>
+            </form>
+
+            <div class="auth-footer" style="text-align: center; margin-top: 1.5rem;">
+                <p>Don't have an account? <a href="{{ url_for('register') }}">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Visibility Toggle Script -->
+    <script>
+        function togglePasswordVisibility(fieldId, iconId) {
+            const input = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>

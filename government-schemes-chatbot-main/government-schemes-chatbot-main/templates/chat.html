@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Schemes Chatbot — SchemeAI</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16">
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation (Panel 4 - Rich Purple Gradient) -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-top">
+                <a href="/" class="brand" style="text-decoration: none;">
+                    <div class="brand-logo" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
+                        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="SchemeAI Logo" class="brand-logo-img">
+                    </div>
+                    <span class="brand-name">Scheme<span>AI</span></span>
+                </a>
+
+                <!-- User Profile Card in Sidebar -->
+                <div class="sidebar-user-card">
+                    <div class="sidebar-user-avatar">
+                        {{ username[0]|upper }}
+                    </div>
+                    <div class="sidebar-user-info">
+                        <h4>{{ username }}</h4>
+                        <p><span class="status-dot"></span> Online &bull; Citizen</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav class="sidebar-nav-menu">
+                    <a href="/" class="sidebar-menu-link">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                    <a href="{{ url_for('schemes_catalog') }}" class="sidebar-menu-link">
+                        <i class="fa-solid fa-layer-group"></i> Schemes
+                    </a>
+                    <a href="{{ url_for('chat_workspace') }}" class="sidebar-menu-link active">
+                        <i class="fa-solid fa-comments"></i> Chatbot
+                    </a>
+                    <a href="{{ url_for('user_profile') }}" class="sidebar-menu-link">
+                        <i class="fa-solid fa-circle-user"></i> Profile
+                    </a>
+                    <a href="/feedback" class="sidebar-menu-link">
+                        <i class="fa-solid fa-comment-dots"></i> Feedback
+                    </a>
+                </nav>
+
+                <!-- Category Shortcuts -->
+                <div>
+                    <p class="nav-section-title">Quick Categories</p>
+                    <ul class="preset-queries">
+                        <li data-query="scholarships and education loans for students">
+                            <i class="fa-solid fa-graduation-cap"></i> Students
+                        </li>
+                        <li data-query="income support and crop insurance for farmers">
+                            <i class="fa-solid fa-seedling"></i> Farmers
+                        </li>
+                        <li data-query="maternity benefits and skill schemes for women">
+                            <i class="fa-solid fa-person-dress"></i> Women Welfare
+                        </li>
+                        <li data-query="pension schemes for senior citizens">
+                            <i class="fa-solid fa-person-cane"></i> Senior Citizens
+                        </li>
+                        <li data-query="job skill training and employment schemes for unemployed youth">
+                            <i class="fa-solid fa-briefcase"></i> Unemployed Youth
+                        </li>
+                        <li data-query="financial assistance and rehabilitation for disabled citizens">
+                            <i class="fa-solid fa-wheelchair"></i> Disabled Citizens
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="{{ url_for('logout') }}" class="btn-sidebar-logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="dashboard-chat">
+            <div class="dashboard-chat-container">
+                <!-- Chat Header (White card with rounded corners) -->
+                <div class="chat-header">
+                    <div class="chat-bot-info">
+                        <div class="chat-bot-avatar">
+                            <img src="{{ url_for('static', filename='images/robot_mascot.png') }}?v=16" alt="SchemeAI Engine" class="bot-logo-img">
+                        </div>
+                        <div class="chat-bot-status">
+                            <h3>Government Schemes Chatbot</h3>
+                            <p><span class="online-indicator"></span> AI Assistant &bull; Online</p>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button id="clear-chat-btn" title="Clear Conversation Logs" class="btn-chat-header btn-chat-clear">
+                            <i class="fa-solid fa-trash-can"></i> <span>Clear Chat</span>
+                        </button>
+                        <a href="/feedback" class="btn-chat-header btn-chat-feedback">
+                            <i class="fa-solid fa-comment-dots"></i> <span>Feedback</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Log (Scrollable) -->
+                <div id="chat-messages" class="chat-messages-area">
+                    <!-- Standard Greeting -->
+                    <div class="chat-bubble bot">
+                        <div class="chat-avatar">
+                            <img src="{{ url_for('static', filename='images/robot_mascot.png') }}?v=16" alt="SchemeAI" class="bot-logo-img">
+                        </div>
+                        <div class="chat-message-content">
+                            <p>Hello <strong>{{ username }}</strong>! 👋 I'm your <strong>SchemeAI assistant</strong>. I can help you find government schemes based on your profile and needs. What would you like to know today?</p>
+                        </div>
+                    </div>
+
+                    <!-- History Loading Indicator -->
+                    <div id="history-loader" style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; padding: 1rem 0;">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary-purple);"></i> Loading past conversation history...
+                    </div>
+                </div>
+
+                <!-- Bottom Input Form (Panel 4) -->
+                <form id="chat-form" class="chat-input-area" style="position: relative;">
+                    <button type="button" style="background: transparent; border: none; color: #94A3B8; font-size: 1.15rem; cursor: pointer; padding: 0 0.5rem;" title="Attach details">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
+                    <input 
+                        type="text" 
+                        id="chat-input" 
+                        placeholder="Type your message here..." 
+                        required 
+                        autocomplete="off"
+                    >
+                    <button type="submit" id="chat-send-btn" class="chat-send-btn" title="Send Message">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=15"></script>
+</body>
+</html>

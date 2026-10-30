@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Schemes — SchemeAI</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16">
+</head>
+<body class="public-page">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="page-container" style="max-width: 1320px;">
+        <!-- Top Navbar (Panel 5) -->
+        <header class="navbar" style="margin-top: 1.25rem;">
+            <a href="/" class="brand">
+                <div class="brand-logo">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="SchemeAI Logo" class="brand-logo-img">
+                </div>
+                <span class="brand-name">Scheme<span>AI</span></span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="{{ url_for('schemes_catalog') }}" class="nav-item active">Schemes</a>
+                <a href="{{ url_for('chat_workspace') }}" class="nav-item">Chatbot</a>
+                <a href="/about" class="nav-item">About</a>
+                <a href="/feedback" class="nav-item">Feedback</a>
+            </nav>
+
+            <div class="nav-actions">
+                {% if logged_in %}
+                    <a href="{{ url_for('user_profile') }}" class="user-pill-btn">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span>{{ username }}</span>
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="btn-nav-logout" title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn-nav-login-light">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-nav-register-light">Register</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Header Row with Title and Search Input (Panel 5) -->
+        <div class="schemes-header-row">
+            <div class="schemes-header-text">
+                <h1 class="schemes-title">
+                    Government Schemes
+                </h1>
+                <p class="schemes-subtitle">
+                    Discover and explore various government schemes for your needs. Find the right scheme, check eligibility, and apply easily.
+                </p>
+            </div>
+
+            <!-- Top Right Elegant Search Bar -->
+            <form action="{{ url_for('schemes_catalog') }}" method="GET" class="schemes-search-pill">
+                <i class="fa-solid fa-magnifying-glass schemes-search-icon"></i>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search schemes by name or keyword..." autocomplete="off">
+                {% if active_category and active_category != 'all' %}
+                    <input type="hidden" name="category" value="{{ active_category }}">
+                {% endif %}
+                {% if search_query %}
+                    <a href="{{ url_for('schemes_catalog', category=active_category if active_category != 'all' else None) }}" class="schemes-search-clear" title="Clear search">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                {% endif %}
+                <button type="submit" class="schemes-search-btn" title="Search Schemes">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Category Filter Pills (Panel 5: All, Student, Farmer, Women, Senior Citizen, Unemployed, Disabled) -->
+        <div class="category-filters-bar" style="justify-content: flex-start; margin: 1.5rem 0 2rem 0;">
+            <a href="{{ url_for('schemes_catalog', q=search_query) }}" class="filter-pill {% if active_category == 'all' %}active{% endif %}">
+                All
+            </a>
+            <a href="{{ url_for('schemes_catalog', category='student', q=search_query) }}" class="filter-pill {% if active_category in ['student', 'students'] %}active{% endif %}">
+                Student
+            </a>
+            <a href="{{ url_for('schemes_catalog', category='farmer', q=search_query) }}" class="filter-pill {% if active_category in ['farmer', 'farmers'] %}active{% endif %}">
+                Farmer
+            </a>
+            <a href="{{ url_for('schemes_catalog', category='women', q=search_query) }}" class="filter-pill {% if active_category in ['women', 'woman'] %}active{% endif %}">
+                Women
+            </a>
+            <a href="{{ url_for('schemes_catalog', category='senior', q=search_query) }}" class="filter-pill {% if active_category in ['senior', 'senior_citizen', 'seniors'] %}active{% endif %}">
+                Senior Citizen
+            </a>
+            <a href="{{ url_for('schemes_catalog', category='unemployed', q=search_query) }}" class="filter-pill {% if active_category in ['unemployed', 'youth'] %}active{% endif %}">
+                Unemployed
+            </a>
+            <a href="{{ url_for('schemes_catalog', category='disabled', q=search_query) }}" class="filter-pill {% if active_category in ['disabled', 'disabled_citizens'] %}active{% endif %}">
+                Disabled
+            </a>
+        </div>
+
+        <!-- Schemes Grid (Panel 5) -->
+        {% if schemes and schemes|length > 0 %}
+        <div class="schemes-catalog-grid">
+            {% for scheme in schemes %}
+            <div class="scheme-card" style="border-radius: var(--radius-xl); padding: 1.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem;">
+                    {% if 'farmer' in scheme.category|lower or 'agri' in scheme.category|lower %}
+                        <span style="background: #D4F7E7; color: #059669; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-seedling"></i> Farmer
+                        </span>
+                    {% elif 'student' in scheme.category|lower %}
+                        <span style="background: #EFF6FF; color: #2563EB; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-graduation-cap"></i> Student
+                        </span>
+                    {% elif 'women' in scheme.category|lower or 'female' in scheme.category|lower %}
+                        <span style="background: #FFE5F0; color: #DB2777; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-person-dress"></i> Women
+                        </span>
+                    {% elif 'senior' in scheme.category|lower or 'pension' in scheme.category|lower %}
+                        <span style="background: #E0F2FE; color: #0284C7; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-person-cane"></i> Senior Citizen
+                        </span>
+                    {% elif 'unemployed' in scheme.category|lower or 'skill' in scheme.category|lower or 'youth' in scheme.category|lower %}
+                        <span style="background: #FFF0E5; color: #EA580C; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-briefcase"></i> Unemployed
+                        </span>
+                    {% elif 'disabled' in scheme.category|lower %}
+                        <span style="background: #F1EAFF; color: #7C3AED; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-wheelchair"></i> Disabled
+                        </span>
+                    {% else %}
+                        <span style="background: #EFF6FF; color: #2563EB; font-weight: 700; font-size: 0.75rem; padding: 0.35rem 0.85rem; border-radius: var(--radius-pill);">
+                            {{ scheme.category|title }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--deep-purple); margin-bottom: 0.5rem;">
+                    {{ scheme.name }}
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.925rem; line-height: 1.55; margin-bottom: 1.5rem; flex-grow: 1;">
+                    {{ scheme.description }}
+                </p>
+
+                <div class="scheme-card-footer" style="padding-top: 0.85rem;">
+                    <a href="{{ url_for('scheme_details', scheme_id=scheme.id) }}" class="scheme-link" style="color: var(--primary-purple); font-weight: 700;">
+                        View Details <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 4rem 1.5rem; background: var(--white); border-radius: var(--radius-xl); border: 1.5px solid var(--border-color); margin: 2rem 0;">
+            <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #94A3B8; margin-bottom: 1rem;"></i>
+            <h3 style="font-family: var(--font-heading); color: var(--deep-purple); font-size: 1.4rem;">No schemes found</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Try adjusting your keyword search or select a different category filter.</p>
+            <a href="{{ url_for('schemes_catalog') }}" class="btn btn-primary btn-sm">Reset Filters</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer" style="margin-top: 4rem;">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Scheme<span>AI</span></h3>
+                <p>Empowering citizens across India with AI-powered, bilingual guidance for central and state government welfare schemes.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Navigation</h4>
+                <ul>
+                    <li><a href="/"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                    <li><a href="/schemes"><i class="fa-solid fa-chevron-right"></i> All Schemes</a></li>
+                    <li><a href="/chat"><i class="fa-solid fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="/about"><i class="fa-solid fa-chevron-right"></i> About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Direct Support</h4>
+                <ul>
+                    <li><a href="/feedback"><i class="fa-solid fa-chevron-right"></i> Share Feedback</a></li>
+                    <li><a href="mailto:support@schemeai.gov.in"><i class="fa-solid fa-envelope"></i> support@schemeai.gov.in</a></li>
+                    <li><a href="/"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SchemeAI Portal. Built for inclusive digital governance.</p>
+        </div>
+    </footer>
+</body>
+</html>
