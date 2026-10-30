@@ -6,3 +6,4 @@ sentence-transformers==5.6.1
 langdetect
 deep-translator
 resend
+gunicorn
